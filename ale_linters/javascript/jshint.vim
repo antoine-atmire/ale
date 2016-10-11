@@ -76,10 +76,3 @@ call ale#linter#Define('javascript', {
 \   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
 \   'callback': 'ale_linters#javascript#jshint#Handle',
 \})
-
-call ale#linter#Define('javascript.jsx', {
-\   'name': 'jshint',
-\   'executable': g:ale_javascript_jshint_executable,
-\   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
-\   'callback': 'ale_linters#javascript#jshint#Handle',
-\})
