@@ -18,15 +18,21 @@ function! ale_linters#elm#make#Handle(buffer, lines)
     if type(l:decoded) == type([])
       call extend(l:errors, l:decoded)
       for l:error in l:errors
-        " vcol is Needed to indicate that the column is a character.
-        call add(l:output, {
-              \   'filename': l:error.file,
+        let l:qfEntry = {
               \   'lnum': l:error.region.start.line,
               \   'vcol': 0,
               \   'col': l:error.region.start.column,
               \   'text': l:error.overview . '   ' . l:error.details,
               \   'type': l:error.type == 'error' ? 'E' : 'W',
-              \})
+              \}
+        if l:error.file =~ '/tmp/'
+          let l:qfEntry["filname"] = l:error.file
+        else
+          let l:qfEntry["bufnr"] = a:buffer
+        endif
+        " vcol is Needed to indicate that the column is a character.
+        " help setqflist
+        call add(l:output, l:qfEntry)
       endfor
     endif
   endif
