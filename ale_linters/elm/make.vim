@@ -28,7 +28,7 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                     let l:file_is_buffer = l:error.file[0:len(l:temp_dir) - 1] is# l:temp_dir
                 endif
 
-                if has_key(l:error,'subregion')
+                if has_key(l:error,'subregion') && type(l:error.subregion) == 4
                     let l:lnum = l:error.subregion.start.line
                     let l:col = l:error.subregion.start.column
                     let l:end_lnum = l:error.subregion.end.line
@@ -38,7 +38,7 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                     let l:col = l:error.region.start.column
                     let l:end_lnum = l:error.region.end.line
                     let l:end_col = l:error.region.end.column
-                end
+                endif
 
                 if l:file_is_buffer
                     call add(l:output, {
