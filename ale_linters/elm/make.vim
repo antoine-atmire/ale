@@ -28,12 +28,24 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                     let l:file_is_buffer = l:error.file[0:len(l:temp_dir) - 1] is# l:temp_dir
                 endif
 
+                if has_key(l:error,'subregion')
+                    let l:lnum = l:error.subregion.start.line
+                    let l:col = l:error.subregion.start.column
+                    let l:end_lnum = l:error.subregion.end.line
+                    let l:end_col = l:error.subregion.end.column
+                else
+                    let l:lnum = l:error.region.start.line
+                    let l:col = l:error.region.start.column
+                    let l:end_lnum = l:error.region.end.line
+                    let l:end_col = l:error.region.end.column
+                end
+
                 if l:file_is_buffer
                     call add(l:output, {
-                    \    'lnum': l:error.region.start.line,
-                    \    'col': l:error.region.start.column,
-                    \    'end_lnum': l:error.region.end.line,
-                    \    'end_col': l:error.region.end.column,
+                    \    'lnum': l:lnum,
+                    \    'col': l:col,
+                    \    'end_lnum': l:end_lnum,
+                    \    'end_col': l:end_col,
                     \    'type': (l:error.type is? 'error') ? 'E' : 'W',
                     \    'text': l:error.overview,
                     \    'detail': l:error.overview . "\n\n" . l:error.details
